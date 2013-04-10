@@ -33,6 +33,7 @@ Executable ghci-in-a-new-dress
                    , process
                    , directory
                    , blaze-html
+                   , blaze-markup
                    , yesod
                    , yesod-core
                    , yesod-static
