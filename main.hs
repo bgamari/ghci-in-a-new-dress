@@ -372,6 +372,7 @@ main = do
   hSetBuffering hout NoBuffering
   hSetBuffering herr NoBuffering
 
+  hPutStr hin ":set prompt Prelude> \n"
   hPutStr hin ":t 1\n"
   readIntro hout
 
