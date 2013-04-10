@@ -64,7 +64,7 @@ mkYesod "HelloWorld" [parseRoutes|
 |]
 
 instance Yesod HelloWorld where
-    approot _ = ""
+    approot = ApprootRelative
 
 tempFileName :: String
 tempFileName = "commandsEntered.hs"
