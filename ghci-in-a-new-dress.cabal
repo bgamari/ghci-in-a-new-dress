@@ -34,7 +34,7 @@ Executable ghci-in-a-new-dress
                    , directory
                    , blaze-html
                    , blaze-markup
-                   , yesod
+                   , yesod >= 1.1 && < 1.2
                    , yesod-core
                    , yesod-static
   Ghc-options:
