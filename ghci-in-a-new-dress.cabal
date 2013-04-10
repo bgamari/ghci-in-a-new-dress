@@ -20,7 +20,7 @@ Compile, run, and then open a browser and go to "http://127.0.0.1:3000/"
 source-repository head
   type: git
   location: git://github.com/johnfn/ghci-in-a-new-dress.git
---  tag: 
+--  tag:
 
 Executable ghci-in-a-new-dress
   Main-Is:         main.hs

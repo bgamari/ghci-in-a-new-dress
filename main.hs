@@ -32,7 +32,7 @@ data HelloWorld = HelloWorld { helloWorldStatic :: Static }
 {- This is Bad, Dirty, Evil, Not Good, etc. Fix if time.  The
  - difficulty is that we need a way to share variables between
  - main and the handlers. I can't figure out a better way to do
- - that. 
+ - that.
  -
  - Reading material: http://www.haskell.org/haskellwiki/Top_level_mutable_state
  -}
@@ -93,7 +93,7 @@ unescape string = go string ""
 
 postGHCIR :: Handler RepHtml
 postGHCIR = do
-  -- This is how you get post data. 
+  -- This is how you get post data.
   -- type of postTuples is [(Data.Text, Data.Text)] - key value pairs
 
   (postTuples, _) <- runRequestBody
@@ -115,7 +115,7 @@ getHomeR = do
     <script src="static/main.js"> </script>
   </head>
   <body>
-    <ul id="autocomplete"> 
+    <ul id="autocomplete">
     </ul>
     <div id="typeannotations">
     </div>
@@ -152,7 +152,7 @@ sentinel :: String
 sentinel = "1234567890"
 
 readUntilDone hout = do
-    line <- hGetLine hout 
+    line <- hGetLine hout
     if sentinel `isInfixOf` line
       then return "\n"
       else go (line ++ "\n")
@@ -165,7 +165,7 @@ readUntilDone hout = do
         else go (resultSoFar ++ line ++ "\n")
 
 lineIsFunctionDefinition :: String -> Bool
-lineIsFunctionDefinition line = 
+lineIsFunctionDefinition line =
   ("=" `isInfixOf` line) && (not (" " `isPrefixOf` line)) && (not ("data" `isPrefixOf` line))
 
 getFunctionName :: String -> String
@@ -179,7 +179,7 @@ stripLet str =
     else str
 
 -- Strip double definitions out of a Haskell file, retaining
--- only the last one. 
+-- only the last one.
 stripDoubleDefs :: String -> IO [String]
 stripDoubleDefs file = do
     contents <- liftM lines $ readFile file
@@ -200,11 +200,11 @@ stripDoubleDefs file = do
             if (any (==line) (map getFunctionName lines))
               then go lines result dataLines
               else go lines (result ++ [stripLet $ line]) dataLines
-        else 
-          if "data" `isPrefixOf` line 
+        else
+          if "data" `isPrefixOf` line
             then go lines result (dataLines ++ [line])
             else go lines (result) dataLines
-      
+
 
 -- Handles text typed in the REPL that does data constructor declarations (data Color = Black | White)
 handleDataInput input hin hout herr = do
@@ -251,7 +251,7 @@ handleDataInput input hin hout herr = do
           return errors
 
 getErrors :: Handle -> IO String
-getErrors herr = 
+getErrors herr =
     go herr ""
   where
     go herr results = do
@@ -283,22 +283,22 @@ parseErrors str =
 
 queryGHCI :: String -> IO String
 queryGHCI input | last input /= '\n' = queryGHCI $ input ++ "\n" -- Append a newline character to the end of input
-queryGHCI input = 
-  
-  -- TODO: Prevent this from running 
+queryGHCI input =
+
+  -- TODO: Prevent this from running
   -- Handle Hoogle queries
   if ":doc" `isPrefixOf` input then queryHaddock input else
   if ":hoogle" `isPrefixOf` input then queryHoogle input else do
-  
+
   -- Lock this function. Only 1 person can query
   -- ghci at a time.
-  
+
   -- Get Hlint suggests only if it's Haskell code and not an interpretor command
   hlint <- if ":" `isPrefixOf` input then (return "") else ((hlintCheck input) )
   let hlintSugg = if ":" `isPrefixOf` input then hlint else (hlint ++ "\n")
 
   -- If "No suggestions", then don't send it in down and if it already ends with '\n', don't do anything
-  
+
   _ <- takeMVar lockGHCI
   hin <- readIORef hInGHCI
   hout <- readIORef hOutGHCI
@@ -319,7 +319,7 @@ queryGHCI input =
                     err <- getErrors herr
                     return err
 
-  
+
   -- This is a hack that lets us discover where the end of the output is.
   -- We will keep reading until we see the sentinel.
   hPutStr hin (":t " ++ sentinel ++ "\n")
@@ -327,7 +327,7 @@ queryGHCI input =
   output <- readUntilDone hout
   putMVar lockGHCI True
 
-  if trimWhitespace(errors) == "" 
+  if trimWhitespace(errors) == ""
     then return (hlintSugg ++ output)
     else return ("ERR: " ++ (show $ parseErrors $ errors))
 
@@ -373,7 +373,7 @@ main = do
   if fileExists
     then removeFile tempFileName
     else return ()
-   
+
   fileExists <- doesFileExist tempDataDefs
   if fileExists
     then removeFile tempDataDefs
@@ -433,7 +433,7 @@ parseHaddock doc =
         extractType e = concat $ map T.unpack $ map nodeText $ init $ drop 1 $ childNodes $ head $ childElements e
         extractDoc  e = convertNodeToMarkup $ (!!) (childElements e) 1
     in
-        case eitherDoc of 
+        case eitherDoc of
             (Right doc_) -> map parseEl $ parseTree (head (docContent doc_))
             (Left err) -> []
 
