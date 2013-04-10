@@ -224,7 +224,7 @@ handleDataInput input hin hout herr = do
       liftIO $ print errLine
       -- Error with that data definition. Forget about it.
       errors <- getErrors herr
-      liftIO $ print "ERrors received:"
+      liftIO $ print "Errors received:"
       liftIO $ print errors
       if (trimWhitespace errors) == ""
         then return ""
